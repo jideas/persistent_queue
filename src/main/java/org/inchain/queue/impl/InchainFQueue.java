@@ -70,6 +70,7 @@ public class InchainFQueue<T> extends PersistentQueue<T> {
         this.queue.clear();
         try {
             this.queue.close();
+            //删除文件
             File file = new File(this.queueName);
             this.deleteFile(file);
         } catch (IOException e) {
