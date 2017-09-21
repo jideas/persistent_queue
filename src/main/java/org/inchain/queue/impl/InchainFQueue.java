@@ -124,7 +124,8 @@ public class InchainFQueue<T> extends PersistentQueue<T> {
         this.queue.clear();
         try {
             this.queue.close();
-            //TODO 删除文件
+            //TODO 删除文件目前删不掉
+            System.gc();
             File file = new File(this.queueName);
             this.deleteFile(file);
         } catch (IOException e) {

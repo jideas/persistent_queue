@@ -102,18 +102,6 @@ public class FSQueue {
     }
 
     /**
-     * 向队列存储添加一个字符串
-     *
-     * @param message
-     *            message
-     * @throws IOException
-     * @throws FileFormatException
-     */
-    public void add(String message) throws IOException, FileFormatException {
-        add(message.getBytes());
-    }
-
-    /**
      * 向队列存储添加一个byte数组
      *
      * @param message

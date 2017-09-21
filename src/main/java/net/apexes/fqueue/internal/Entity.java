@@ -3,6 +3,7 @@ package net.apexes.fqueue.internal;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.lang.reflect.Method;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
@@ -206,15 +207,29 @@ public class Entity {
     public void close() throws IOException {
         if (mappedByteBuffer != null) {
             mappedByteBuffer.force();
-            mappedByteBuffer = null;
+            mappedByteBuffer.clear();
+            clean(mappedByteBuffer);
         }
-        if (null != fc&&fc.isOpen()) {
+        if (null != fc && fc.isOpen()) {
             fc.close();
-            fc = null;
         }
         if (null != raFile) {
             raFile.close();
-            raFile = null;
+        }
+        mappedByteBuffer = null;
+        fc = null;
+        raFile = null;
+    }
+
+    public static void clean(final Object buffer) {
+        try {
+            Method getCleanerMethod = buffer.getClass().getMethod("cleaner", new Class[0]);
+            getCleanerMethod.setAccessible(true);
+            sun.misc.Cleaner cleaner = (sun.misc.Cleaner) getCleanerMethod.invoke(buffer, new Object[0]);
+            cleaner.clean();
+            getCleanerMethod.setAccessible(false);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -244,19 +259,15 @@ public class Entity {
     private class Sync implements Runnable {
         @Override
         public void run() {
-            while (true) {
-                if (mappedByteBuffer != null) {
-                    try {
-                        mappedByteBuffer.force();
-                    } catch (Exception e) {
-                        break;
-                    }
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        break;
-                    }
-                } else {
+            while (mappedByteBuffer != null) {
+                try {
+                    mappedByteBuffer.force();
+                } catch (Exception e) {
+                    break;
+                }
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
                     break;
                 }
             }
