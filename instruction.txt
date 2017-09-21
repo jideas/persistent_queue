@@ -1,0 +1,2 @@
+1,使用spring的场景，直接依赖QueueService
+2，不是用spring的环境，使用QueueServiceFactory类的createQueueService方法创建服务实例
