@@ -15,7 +15,7 @@ import java.io.IOException;
  * 队列服务类
  * Created by Niels on 2017/9/20.
  */
-@Service//todo 这里是否声明为spring的@Service
+@Service
 public class FQueueService<T> implements QueueService<T> {
     private static Logger log = LoggerFactory.getLogger(FQueueService.class);
 
