@@ -57,7 +57,7 @@ public class Entity {
             createLogEntity();
         } else {
             raFile = new RandomAccessFile(file, "rwd");
-            int fileLength = (int)raFile.length();
+            int fileLength = (int) raFile.length();
             if (fileLength < MESSAGE_START_POSITION) {
                 throw new FileFormatException("file format error");
             }
@@ -172,7 +172,6 @@ public class Entity {
     }
 
     /**
-     *
      * @param commit 如果为 false，则只读取数据，不移动读取指针。
      * @return
      * @throws IOException
@@ -205,13 +204,18 @@ public class Entity {
     }
 
     public void close() throws IOException {
-        if (mappedByteBuffer == null) {
-            return;
+        if (mappedByteBuffer != null) {
+            mappedByteBuffer.force();
+            mappedByteBuffer = null;
         }
-        mappedByteBuffer.force();
-        mappedByteBuffer = null;
-        fc.close();
-        raFile.close();
+        if (null != fc&&fc.isOpen()) {
+            fc.close();
+            fc = null;
+        }
+        if (null != raFile) {
+            raFile.close();
+            raFile = null;
+        }
     }
 
     public String headerInfo() {

@@ -35,7 +35,13 @@ public class FQueueTest extends TestCase {
         while (true) {
             log.info("start poll....");
 
-            Long data = service.poll(queueName);
+            Long data = null;
+//            try {
+//                data = service.take(queueName);
+//            } catch (InterruptedException e) {
+//                log.error("", e);
+//            }
+            data = service.poll(queueName);
             if (data == null) {
                 break;
             }

@@ -1,6 +1,7 @@
 package org.inchain.queue;
 
 import net.apexes.fqueue.exception.FileFormatException;
+import org.inchain.queue.util.stat.StatInfo;
 
 import java.io.IOException;
 
@@ -9,8 +10,10 @@ import java.io.IOException;
  * Created by Niels on 2017/9/20.
  */
 public abstract class PersistentQueue<T> {
+
     protected String queueName;
     protected long maxSize;
+    private StatInfo statInfo;
 
     public final String getQueueName() {
         return queueName;
@@ -38,6 +41,8 @@ public abstract class PersistentQueue<T> {
      */
     public abstract T poll();
 
+    public abstract T take() throws InterruptedException;
+
     /**
      * @return 队列当前长度
      */
@@ -60,4 +65,13 @@ public abstract class PersistentQueue<T> {
      * 清空队列
      */
     public abstract void clear();
+
+    public void setStatInfo(StatInfo statInfo) {
+        this.statInfo = statInfo;
+    }
+
+    public StatInfo getStatInfo() {
+
+        return statInfo;
+    }
 }

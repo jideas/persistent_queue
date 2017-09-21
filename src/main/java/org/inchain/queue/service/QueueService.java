@@ -1,6 +1,7 @@
 package org.inchain.queue.service;
 
 import net.apexes.fqueue.exception.FileFormatException;
+import org.inchain.queue.util.stat.StatInfo;
 
 import java.io.IOException;
 
@@ -19,6 +20,16 @@ public interface QueueService<T> {
     public boolean createQueue(String queueName, long maxSize);
 
     /**
+     * 创建一个持久化队列
+     *
+     * @param queueName    队列名称
+     * @param maxSize      单个文件最大大小fileLimitLength
+     * @param latelySecond 统计日志时间段
+     * @return 是否创建成功
+     */
+    public boolean createQueue(String queueName, long maxSize, int latelySecond);
+
+    /**
      * 销毁该队列，并删除磁盘文件
      *
      * @param queueName 队列名称
@@ -33,6 +44,8 @@ public interface QueueService<T> {
      * @return
      */
     T poll(String queueName);
+
+    T take(String queueName) throws InterruptedException;
 
     /**
      * 向队列中加入一条数据
@@ -52,7 +65,25 @@ public interface QueueService<T> {
      */
     public long getMaxSize(String queueName);
 
+    /**
+     * 清空队列
+     *
+     * @param queueName
+     */
     void clear(String queueName);
 
+    /**
+     * 关闭队列
+     *
+     * @param queueName
+     * @throws IOException
+     * @throws FileFormatException
+     */
     void close(String queueName) throws IOException, FileFormatException;
+
+    /**
+     * @param queueName
+     * @return
+     */
+    StatInfo getStatInfo(String queueName);
 }
