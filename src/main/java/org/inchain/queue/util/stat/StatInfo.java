@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
+ * 队列统计信息
  * Created by Niels on 2017/9/21.
  * inchain.org
  */
@@ -92,14 +93,44 @@ public class StatInfo {
         return log.toString();
     }
 
+    /**
+     * @return 本次启动后总写入条数
+     */
     public AtomicLong getInCount() {
         return inCount;
     }
 
+    /**
+     * @return 本次启动后总读出条数
+     */
     public AtomicLong getOutCount() {
         return outCount;
     }
 
+    /**
+     * @return 队列名称
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return 本次启动时间点
+     */
+    public long getStartTime() {
+        return startTime;
+    }
+
+    /**
+     * @return 启动前文件中积压的未读取条数
+     */
+    public long getLastSize() {
+        return lastSize;
+    }
+
+    /**
+     * @return 获取速度计算的统计时间（秒）
+     */
     public int getLatelySecond() {
         return latelySecond;
     }
@@ -112,10 +143,16 @@ public class StatInfo {
         return lastOutCount;
     }
 
+    /**
+     * @return 最近写入速度（条/秒）
+     */
     public long getLatelyInTps() {
         return latelyInTps;
     }
 
+    /**
+     * @return 最近读出速度（条/秒）
+     */
     public long getLatelyOutTps() {
         return latelyOutTps;
     }

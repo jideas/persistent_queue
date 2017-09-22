@@ -19,7 +19,7 @@ public class FQueueTest extends TestCase {
     @Test
     public void test() {
         //创建
-        boolean b = service.createQueue(queueName, 1000);
+        boolean b = service.createQueue(queueName, 64);
         assertTrue(b);
 
         //写入
@@ -49,7 +49,7 @@ public class FQueueTest extends TestCase {
         }
 
 
-        service.destroyQueue(queueName);
+//        service.destroyQueue(queueName);
         assertTrue(true);
     }
 

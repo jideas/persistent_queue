@@ -92,7 +92,7 @@ public class FSQueue {
      * @throws FileFormatException
      */
     private void rotateNextLogWriter() throws IOException, FileFormatException {
-        writerIndex = writerIndex + 1;
+        writerIndex = (writerIndex + 1)%1000+1;
         writerHandle.putNextFileNumber(writerIndex);
         if (readerHandle != writerHandle) {
             writerHandle.close();
@@ -128,7 +128,8 @@ public class FSQueue {
             readerHandle.reset();
             File deleteFile = readerHandle.getFile();
             readerHandle.close();
-            deleteFile.delete();
+            boolean b = deleteFile.delete();
+            System.out.println(deleteFile.getName()+",删除结果："+b);
             // 更新下一次读取的位置和索引
             idx.putReaderPosition(Entity.MESSAGE_START_POSITION);
             idx.putReaderIndex(nextFileNumber);

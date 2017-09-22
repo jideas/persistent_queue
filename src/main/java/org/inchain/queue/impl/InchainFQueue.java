@@ -21,6 +21,15 @@ import java.util.concurrent.locks.ReentrantLock;
 public class InchainFQueue<T> extends PersistentQueue<T> {
 
     private FQueue queue = null;
+    /**
+     * Lock held by take, poll, etc
+     */
+    private final ReentrantLock takeLock = new ReentrantLock();
+
+    /**
+     * Wait queue for waiting takes
+     */
+    private final Condition notEmpty = takeLock.newCondition();
 
     /**
      * 创建队列
@@ -62,16 +71,6 @@ public class InchainFQueue<T> extends PersistentQueue<T> {
         }
 
     }
-
-    /**
-     * Lock held by take, poll, etc
-     */
-    private final ReentrantLock takeLock = new ReentrantLock();
-
-    /**
-     * Wait queue for waiting takes
-     */
-    private final Condition notEmpty = takeLock.newCondition();
 
     public T take() throws InterruptedException {
         T x;
