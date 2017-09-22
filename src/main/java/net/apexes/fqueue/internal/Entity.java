@@ -9,6 +9,7 @@ import java.nio.channels.FileChannel;
 
 import net.apexes.fqueue.exception.FileEOFException;
 import net.apexes.fqueue.exception.FileFormatException;
+import org.inchain.queue.util.MappedBufferCleanUtil;
 import sun.nio.ch.FileChannelImpl;
 
 /**
@@ -197,10 +198,6 @@ public class Entity {
         return bytes;
     }
 
-    public byte[] read() throws IOException, FileEOFException {
-        return read(true);
-    }
-
     public File getFile() {
         return file;
     }
@@ -209,7 +206,7 @@ public class Entity {
         if (mappedByteBuffer != null) {
             mappedByteBuffer.force();
             mappedByteBuffer.clear();
-            clean(mappedByteBuffer);
+            MappedBufferCleanUtil.clean(mappedByteBuffer);
             mappedByteBuffer = null;
         }
         if (null != fc) {
@@ -219,27 +216,6 @@ public class Entity {
         if (null != raFile) {
             raFile.close();
             raFile = null;
-        }
-    }
-
-    public static void clean(final Object buffer) {
-        if (null == buffer) {
-            return;
-        }
-        try {
-            // 加上这几行代码,手动unmap
-            Method m = FileChannelImpl.class.getDeclaredMethod("unmap",
-                    MappedByteBuffer.class);
-            m.setAccessible(true);
-            m.invoke(FileChannelImpl.class, buffer);
-//另一种实现方式
-//            Method getCleanerMethod = buffer.getClass().getMethod("cleaner", new Class[0]);
-//            getCleanerMethod.setAccessible(true);
-//            sun.misc.Cleaner cleaner = (sun.misc.Cleaner) getCleanerMethod.invoke(buffer, new Object[0]);
-//            cleaner.clean();
-//            getCleanerMethod.setAccessible(false);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 

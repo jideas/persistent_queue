@@ -83,7 +83,7 @@ public abstract class QueueManager {
         lockMap.put(queueName, new ReentrantLock());
     }
 
-    public static void destroyQueue(String queueName) {
+    public static void destroyQueue(String queueName) throws IOException, FileFormatException {
         PersistentQueue queue = queuesMap.get(queueName);
         if (null == queue) {
             throw new QueueException("队列不存在");

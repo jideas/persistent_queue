@@ -1,3 +1,5 @@
+import org.inchain.queue.util.MappedBufferCleanUtil;
+
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Method;
@@ -18,26 +20,16 @@ public class TestNIOMain {
         mappedByteBuffer.put("Niels Wang".getBytes());
         mappedByteBuffer.force();
         mappedByteBuffer.clear();
-        clean(mappedByteBuffer);
+        MappedBufferCleanUtil.clean(mappedByteBuffer);
         fc.close();
         raf.close();
         mappedByteBuffer = null;
         fc = null;
         raf = null;
-        Thread.sleep(10000l);
-        f.deleteOnExit();
+//        Thread.sleep(10000l);
+        boolean b = f.delete();
+        System.out.println(b);
     }
 
-    public static void clean(final Object buffer) throws Exception {
-        try {
-            Method getCleanerMethod = buffer.getClass().getMethod("cleaner", new Class[0]);
-            getCleanerMethod.setAccessible(true);
-            sun.misc.Cleaner cleaner = (sun.misc.Cleaner) getCleanerMethod.invoke(buffer, new Object[0]);
-            cleaner.clean();
-            getCleanerMethod.setAccessible(false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 }

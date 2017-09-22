@@ -48,6 +48,7 @@ public class FQueueTest extends TestCase {
             log.info("poll data:" + data);
         }
 
+
         service.destroyQueue(queueName);
         assertTrue(true);
     }

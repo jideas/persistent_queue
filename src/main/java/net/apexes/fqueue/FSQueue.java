@@ -172,6 +172,7 @@ public class FSQueue {
 
     public void clear() throws IOException, FileFormatException {
         idx.clear();
+        //TODO 释放旧的资源
         initHandle();
     }
 

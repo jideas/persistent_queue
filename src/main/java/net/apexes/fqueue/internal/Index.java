@@ -10,6 +10,7 @@ import java.nio.channels.FileChannel.MapMode;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import net.apexes.fqueue.exception.FileFormatException;
+import org.inchain.queue.util.MappedBufferCleanUtil;
 
 /**
  * 数据索引文件
@@ -185,6 +186,7 @@ public class Index {
     public void close() throws IOException {
         mappedByteBuffer.force();
         mappedByteBuffer.clear();
+        MappedBufferCleanUtil.clean(mappedByteBuffer);
         fc.close();
         dbRandFile.close();
         mappedByteBuffer = null;

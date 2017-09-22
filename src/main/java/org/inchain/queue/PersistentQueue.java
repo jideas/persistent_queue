@@ -51,7 +51,7 @@ public abstract class PersistentQueue<T> {
     /**
      * 销毁改队列，包括删除磁盘文件
      */
-    public abstract void distroy();
+    public abstract void distroy() throws IOException, FileFormatException;
 
     /**
      * 关闭队列

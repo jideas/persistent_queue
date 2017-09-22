@@ -117,36 +117,27 @@ public class InchainFQueue<T> extends PersistentQueue<T> {
     }
 
     @Override
-    public void distroy() {
+    public void distroy() throws IOException, FileFormatException {
         if (null == queue) {
             return;
         }
-        this.queue.clear();
-        try {
-            this.queue.close();
-            //TODO 删除文件目前删不掉
-            System.gc();
-            File file = new File(this.queueName);
-            this.deleteFile(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (FileFormatException e) {
-            e.printStackTrace();
-        }
+        this.queue.close();
+        File file = new File(this.queueName);
+        this.deleteFile(file);
     }
 
     private void deleteFile(File file) {
         if (null != file && file.exists()) {//判断文件是否存在
             if (file.isFile()) {//判断是否是文件
                 boolean b = file.delete();//删除文件
-                System.out.println("删除文件:" + file.getPath() + "，结果：" + b);
+//                System.out.println("删除文件:" + file.getPath() + "，结果：" + b);
             } else if (file.isDirectory()) {//否则如果它是一个目录
                 File[] files = file.listFiles();//声明目录下所有的文件 files[];
                 for (File f : files) {//遍历目录下所有的文件
                     this.deleteFile(f);//把每个文件用这个方法进行迭代
                 }
                 boolean b = file.delete();//删除文件夹
-                System.out.println("删除文件:" + file.getPath() + "，结果：" + b);
+//                System.out.println("删除文件:" + file.getPath() + "，结果：" + b);
             }
         }
     }
